@@ -22,8 +22,6 @@
 #define LED2 15
 #define LED3 16
 
-#define SLED_F 2
-#define SLED_S 1
 
 void app_main(void)
 {
@@ -32,18 +30,10 @@ void app_main(void)
 	gpio_reset_pin(LED2);
 	gpio_reset_pin(LED3);
 
-	gpio_reset_pin(SLED_F);
-	gpio_reset_pin(SLED_S);
-
 	gpio_set_direction(LED0, GPIO_MODE_OUTPUT);
 	gpio_set_direction(LED1, GPIO_MODE_OUTPUT);
 	gpio_set_direction(LED2, GPIO_MODE_OUTPUT);
 	gpio_set_direction(LED3, GPIO_MODE_OUTPUT);
-
-	gpio_set_direction(SLED_S, GPIO_MODE_OUTPUT);
-	gpio_set_direction(SLED_F, GPIO_MODE_OUTPUT);
-	gpio_set_level(SLED_S,0);
-	gpio_set_level(SLED_F,0);
 
     while (true) {
     	gpio_set_level(LED0,1);
