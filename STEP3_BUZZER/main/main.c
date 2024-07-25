@@ -37,7 +37,7 @@
 
 char	g_mode;
 
-void LED_set(char data)
+void setLED(char data)
 {
 	if(data & 0x01){
 		gpio_set_level(LED0,1);
@@ -61,7 +61,7 @@ void LED_set(char data)
 	}
 }
 
-void mode_exec(char mode)
+void execByMode(char mode)
 {
 	switch(mode){
 	case 1:
@@ -96,7 +96,7 @@ void mode_exec(char mode)
 	}
 }
 
-void all_init(void){
+void initAll(void){
 	gpio_reset_pin(LED0);
 	gpio_reset_pin(LED1);
 	gpio_reset_pin(LED2);
@@ -136,10 +136,10 @@ void all_init(void){
 
 void app_main(void)
 {
-	all_init();
+	initAll();
 
 	g_mode = 1;
-	LED_set(g_mode);
+	setLED(g_mode);
 
     while (1) {
         while(gpio_get_level(SW_L) & gpio_get_level(SW_R)){
@@ -158,7 +158,7 @@ void app_main(void)
         		ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
         		ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         	}
-        	LED_set(g_mode);
+        	setLED(g_mode);
         }
         if(gpio_get_level(SW_L) == 0){
         	ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_0, INC_FREQ);
@@ -172,7 +172,7 @@ void app_main(void)
         	ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
         	ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         	vTaskDelay(300 / portTICK_PERIOD_MS);
-        	mode_exec(g_mode);
+        	execByMode(g_mode);
         }
         while(!(gpio_get_level(SW_L) & gpio_get_level(SW_R))){
         	vTaskDelay(10 / portTICK_PERIOD_MS);
