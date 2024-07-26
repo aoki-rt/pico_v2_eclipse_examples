@@ -52,7 +52,9 @@ static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_ev
 		adc_oneshot_read(adc1_handle, AD4, &temp_r);
 	    adc_oneshot_read(adc1_handle, AD1, &temp_l);
 	    gpio_set_level(SLED_F,1);	//LED on
-	    for (int i = 0; i < 10; i++);
+	    for (int i = 0; i < 10; i++){
+			asm("nop \n");
+		}
 	    adc_oneshot_read(adc1_handle, AD4, &temp);
 	    g_sensor_value_fr = temp - temp_r;
 	    adc_oneshot_read(adc1_handle, AD1, &temp);
@@ -63,7 +65,9 @@ static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_ev
 		adc_oneshot_read(adc1_handle, AD3, &temp_r);
 		adc_oneshot_read(adc1_handle, AD2, &temp_l);
 		gpio_set_level(SLED_S,1);	//LED on
-	    for (int i = 0; i < 10; i++);
+	    for (int i = 0; i < 10; i++){
+			asm("nop \n");
+		}
 	    adc_oneshot_read(adc1_handle, AD3, &temp);
 	    g_sensor_value_r = temp - temp_r;
 	    adc_oneshot_read(adc1_handle, AD2, &temp);
@@ -83,7 +87,7 @@ static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_ev
 	return 0;
 }
 
-void init_all(void){
+void initAll(void){
 	//init gpio
 	gpio_reset_pin(SLED_F);
 	gpio_reset_pin(SLED_S);
@@ -94,7 +98,7 @@ void init_all(void){
 	gptimer_config_t timer_config = {
 		.clk_src = GPTIMER_CLK_SRC_DEFAULT,
 		.direction = GPTIMER_COUNT_UP,
-		.resolution_hz = 1000000// 1MHz, 1 tick=1us
+		.resolution_hz = 1000000// 1MHz(1us)
 	};
 	gptimer_new_timer(&timer_config, &gptimer);
 
@@ -105,7 +109,7 @@ void init_all(void){
 
 	gptimer_alarm_config_t alarm_config1 = {
 		.reload_count = 0,
-		.alarm_count = 500, // period = 2kHz
+		.alarm_count = 500, //500*1us=500us(2kHz)
 		.flags.auto_reload_on_alarm = true,
 	};
 	gptimer_set_alarm_action(gptimer, &alarm_config1);
@@ -118,6 +122,7 @@ void init_all(void){
 	    .unit_id = ADC_UNIT_1,
 	};
 	adc_oneshot_new_unit(&init_config1, &adc1_handle);
+	
 	adc_oneshot_chan_cfg_t config = {
 	    .bitwidth = ADC_BITWIDTH_DEFAULT,
 	    .atten = ADC_ATTEN,
@@ -141,7 +146,7 @@ void init_all(void){
 
 void app_main(void)
 {
-	init_all();
+	initAll();
 
 	gptimer_start(gptimer);
 
