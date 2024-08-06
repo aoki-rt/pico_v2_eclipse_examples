@@ -42,7 +42,7 @@ gptimer_handle_t gptimer = NULL;
 adc_oneshot_unit_handle_t adc1_handle = NULL;
 adc_cali_handle_t adc1_cali_chan0_handle = NULL;
 
-static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
+static bool IRAM_ATTR onTimer1Cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
 {
 	static char cnt = 0;
 	int temp_r, temp_l,temp,v_temp;
@@ -103,7 +103,7 @@ void initAll(void){
 	gptimer_new_timer(&timer_config, &gptimer);
 
 	gptimer_event_callbacks_t cbs = {
-		.on_alarm = onTimer1_cb
+		.on_alarm = onTimer1Cb
 	};
 	gptimer_register_event_callbacks(gptimer, &cbs, NULL);
 
