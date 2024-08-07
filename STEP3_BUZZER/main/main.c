@@ -37,7 +37,7 @@
 
 char	g_mode;
 
-void setLED(char data)
+void LEDSet(char data)
 {
 	if(data & 0x01){
 		gpio_set_level(LED0,1);
@@ -139,7 +139,7 @@ void app_main(void)
 	initAll();
 
 	g_mode = 1;
-	setLED(g_mode);
+	LEDSet(g_mode);
 
     while (1) {
         while(gpio_get_level(SW_L) & gpio_get_level(SW_R)){
@@ -158,7 +158,7 @@ void app_main(void)
         		ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
         		ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         	}
-        	setLED(g_mode);
+        	LEDSet(g_mode);
         }
         if(gpio_get_level(SW_L) == 0){
         	ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_0, INC_FREQ);

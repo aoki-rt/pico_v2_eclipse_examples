@@ -242,20 +242,20 @@ void DEVICE::initAll(void)
 	mcpwm_timer_enable(pwmtimer_r);
 	mcpwm_timer_enable(pwmtimer_l);
 
-	enableMotor();
+	motorEnable();
 	delay(200);
-	disableMotor();
+	motorDisable();
 
-	enableBuzzer(INC_FREQ);
+	buzzerEnable(INC_FREQ);
 	delay(80);
-	disableBuzzer();
+	buzzerDisable();
 
 }
 
 
 
 //LED
-void DEVICE::setLED(int led_data)
+void DEVICE::LEDSet(int led_data)
 {
 	gpio_set_level((gpio_num_t)LED0,led_data&0x01);
 	gpio_set_level((gpio_num_t)LED1,(led_data&0x02)>>1);
@@ -264,28 +264,28 @@ void DEVICE::setLED(int led_data)
 }
 
 //buzzer
-void DEVICE::enableBuzzer(short f) {
+void DEVICE::buzzerEnable(short f) {
 	ledcWritetone(BUZZER_CH, f);
 }
 
-void DEVICE::disableBuzzer(void)
+void DEVICE::buzzerDisable(void)
 {
 	ledcWrite(BUZZER_CH, 0);  //duty 100% Buzzer OFF
 }
 
 //motor
-void DEVICE::enableMotor(void)
+void DEVICE::motorEnable(void)
 {
 
 	gpio_set_level((gpio_num_t)MOTOR_EN,1);//Power On
 }
 
-void DEVICE::disableMotor(void)
+void DEVICE::motorDisable(void)
 {
 	gpio_set_level((gpio_num_t)MOTOR_EN,0);//Power Off
 }
 
-void DEVICE::moveDir(t_CW_CCW left_CW, t_CW_CCW right_CW)
+void DEVICE::motorMoveDir(t_CW_CCW left_CW, t_CW_CCW right_CW)
 {
 	if(right_CW == MOT_FORWARD)
 	{
@@ -304,7 +304,7 @@ void DEVICE::moveDir(t_CW_CCW left_CW, t_CW_CCW right_CW)
 }
 
 //switch
-unsigned char DEVICE::getSW(void)
+unsigned char DEVICE::switchGet(void)
 {
 	unsigned char ret = 0;
 	if (gpio_get_level((gpio_num_t)SW_R) == 0) {

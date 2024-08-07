@@ -17,14 +17,14 @@
 
 extern "C" void app_main(void)
 {
-	g_device.all_init();
+	g_device.initAll();
 
     while (true) {
-    	while(g_device.switch_get()==0) {
+    	while(g_device.switchGet()==0) {
     		delay(10);
     	    continue;
     	}
-    	g_device.motor_enable();
+    	g_device.motorEnable();
     	delay(1000);
     	g_run.rotate(right, 1);
     	delay(1000);
@@ -34,7 +34,7 @@ extern "C" void app_main(void)
     	delay(1000);
     	g_run.rotate(left, 2);
     	delay(1000);
-    	g_device.motor_disable();
+    	g_device.motorDisable();
     }
 
 }

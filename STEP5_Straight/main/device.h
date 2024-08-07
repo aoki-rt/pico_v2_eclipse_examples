@@ -75,15 +75,15 @@ public:
 	mcpwm_cmpr_handle_t comparator_l = NULL;
 	mcpwm_oper_handle_t pwmoprator_l = NULL;
 
-	void setLED(int led_data);
-	unsigned char getSW(void);
+	void LEDSet(int led_data);
+	unsigned char switchGet(void);
 
 	void ledcSetup(ledc_channel_t ledc_num,int hz,int resolution);
 	void ledcWrite (ledc_channel_t ledc_num,int duty);
 	void ledcWritetone(ledc_channel_t ledc_num,int hz);
 	void ledcAttachPin(int io_num,ledc_channel_t ledc_num);
-	void enableBuzzer(short f);
-	void disableBuzzer(void);
+	void buzzerEnable(short f);
+	void buzzerDisable(void);
 
 	void initAll(void);
 
@@ -99,9 +99,9 @@ public:
 
 	void pwmtimerStart(void);
 	void pwmtimerStop(void);
-	void enableMotor(void);
-	void disableMotor(void);
-	void moveDir(t_CW_CCW left_CW, t_CW_CCW right_CW);
+	void motorEnable(void);
+	void motorDisable(void);
+	void motorMoveDir(t_CW_CCW left_CW, t_CW_CCW right_CW);
 	void pwmHzSet(unsigned short step_hz_l, unsigned short step_hz_r);
 	void pwmHzSetRight(int step_hz_r);
 	void pwmHzSetLeft(int step_hz_l);

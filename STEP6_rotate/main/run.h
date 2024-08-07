@@ -25,13 +25,13 @@ class RUN
 public:
 	RUN();
 	void accelerate(int len, int tar_speed);
-	void one_step(int len, int tar_speed);
+	void oneStep(int len, int tar_speed);
 	void decelerate(int len, int tar_speed);
 	void rotate(t_direction dir, int times);
-	bool move_flag_get(void);
-	void step_inc_right(void);
-	void step_inc_left(void);
-	void interrupt_control(void);
+	bool moveFlagGet(void);
+	void stepIncRight(void);
+	void stepIncLeft(void);
+	void interruptControl(void);
 
 private:
     volatile unsigned int step_r, step_l;

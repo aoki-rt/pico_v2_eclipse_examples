@@ -71,7 +71,7 @@ void RUN::accelerate(int len, int tar_speed)
 	step_hz_r = step_hz_l = (unsigned short)(speed / PULSE);
 	g_device.pwmHzSet(step_hz_l,step_hz_r);
 	obj_step = (int)((float)len * 2.0 / PULSE);
-	g_device.moveDir(MOT_FORWARD,MOT_FORWARD);
+	g_device.motorMoveDir(MOT_FORWARD,MOT_FORWARD);
 
 	g_device.pwmtimerStart();
 	motor_move = 1;
@@ -92,7 +92,7 @@ void RUN::oneStep(int len, int tar_speed)
 	step_hz_r = step_hz_l = (unsigned short)(speed / PULSE);
 	g_device.pwmHzSet(step_hz_l,step_hz_r);
 	obj_step = (int)((float)len * 2.0 / PULSE);
-	g_device.moveDir(MOT_FORWARD,MOT_FORWARD);
+	g_device.motorMoveDir(MOT_FORWARD,MOT_FORWARD);
 
 	while ((step_r + step_l) < obj_step) {
 		continue;
@@ -110,7 +110,7 @@ void RUN::decelerate(int len, int tar_speed)
 	step_hz_r = step_hz_l = (unsigned short)(speed / PULSE);
 	g_device.pwmHzSet(step_hz_l,step_hz_r);
 	obj_step = (int)((float)len * 2.0 / PULSE);
-	g_device.moveDir(MOT_FORWARD,MOT_FORWARD);
+	g_device.motorMoveDir(MOT_FORWARD,MOT_FORWARD);
 
 	while ((len - (step_r + step_l) / 2.0 * PULSE) >
 	(((speed * speed) - (MIN_SPEED * MIN_SPEED)) / (2.0 * 1000.0 * 1.5))) {

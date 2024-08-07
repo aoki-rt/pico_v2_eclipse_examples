@@ -22,20 +22,20 @@ extern "C" void app_main(void)
 	g_device.initAll();
 
     while (true) {
-    	while(g_device.getSW()==0) {
+    	while(g_device.switchGet()==0) {
     		delay(10);
     	    continue;
     	}
-    	g_device.enableMotor();
+    	g_device.motorEnable();
     	delay(1000);
-    	g_device.setLED(0x01);
+    	g_device.LEDSet(0x01);
     	g_run.accelerate(45, 200);
-    	g_device.setLED(0x07);
+    	g_device.LEDSet(0x07);
     	g_run.oneStep(90, 200);
-    	g_device.setLED(0x0f);
+    	g_device.LEDSet(0x0f);
     	g_run.decelerate(45, 200);
-    	g_device.setLED(0);
+    	g_device.LEDSet(0);
     	delay(1000);
-    	g_device.disableMotor();
+    	g_device.motorDisable();
     }
 }

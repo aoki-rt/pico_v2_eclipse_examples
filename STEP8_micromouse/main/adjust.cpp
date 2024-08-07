@@ -26,7 +26,7 @@
 
 ADJUST g_adjust;
 
-void ADJUST::map_view(void)
+void ADJUST::mapView(void)
 {
 
   std::cout << "\x1b[2j";
@@ -101,9 +101,9 @@ void ADJUST::map_view(void)
   }
 }
 
-void ADJUST::adc_view(void)
+void ADJUST::adcView(void)
 {
-	g_device.motor_disable();
+	g_device.motorDisable();
 
 	while (1) {
 		std::cout <<"r_sen        is " << std::setw(6) << g_sensor.sen_r.value << std::endl;
@@ -116,9 +116,9 @@ void ADJUST::adc_view(void)
 	}
 }
 
-void ADJUST::straight_check(int section_check)
+void ADJUST::straightCheck(int section_check)
 {
-	g_device.motor_enable();
+	g_device.motorEnable();
 	delay(1000);
 	g_run.accelerate(HALF_SECTION, SEARCH_SPEED);
 	if (section_check > 1) {
@@ -126,17 +126,17 @@ void ADJUST::straight_check(int section_check)
 	}
 	g_run.decelerate(HALF_SECTION, SEARCH_SPEED);
 
-	g_device.motor_disable();
+	g_device.motorDisable();
 }
 
-void ADJUST::rotation_check(void)
+void ADJUST::rotationCheck(void)
 {
-	g_device.motor_enable();
+	g_device.motorEnable();
 	delay(1000);
 	for (int i = 0; i < 8; i++) {
 		g_run.rotate(right, 1);
 	}
-	g_device.motor_disable();
+	g_device.motorDisable();
 }
 
 void ADJUST::menu(void)
@@ -148,20 +148,20 @@ void ADJUST::menu(void)
 	while (1) {
 		g_device.LED_set(mode);
 		while (1) {
-			sw = g_device.switch_get();
+			sw = g_device.switchGet();
 			if (sw != 0) break;
 			delay(33);
 			LED3_data ^= 1;
-			g_device.LED_set((mode & 0x7) + ((LED3_data << 3) & 0x08));
+			g_device.LEDSet((mode & 0x7) + ((LED3_data << 3) & 0x08));
 		}
 		LED3_data = 0;
 		switch (sw) {
       		case SW_RM:
-      			mode = g_misc.button_inc(mode, 7, 1);
+      			mode = g_misc.buttonInc(mode, 7, 1);
       			break;
       		case SW_LM:
       			g_misc.button_ok();
-      			if (mode_exec(mode) == 1) {
+      			if (modeExec(mode) == 1) {
       				return;
       			}
       			break;
@@ -171,22 +171,22 @@ void ADJUST::menu(void)
 	}
 }
 
-unsigned char ADJUST::mode_exec(unsigned char mode)
+unsigned char ADJUST::modeExec(unsigned char mode)
 {
-  g_device.motor_enable();
+  g_device.motorEnable();
   switch (mode) {
     case 1:
-      adc_view();
+      adcView();
       break;
     case 2:
-      straight_check(9);
+      straightCheck(9);
       break;
 
     case 3:
-      rotation_check();
+      rotationCheck();
       break;
     case 4:
-      g_flash.map_copy();
+      g_flash.mapCopy();
       map_view();
       break;
 

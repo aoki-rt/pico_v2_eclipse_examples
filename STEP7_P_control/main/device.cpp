@@ -18,19 +18,19 @@ DEVICE g_device;
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 //interrupt call
-static bool IRAM_ATTR onTimer0_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
+static bool IRAM_ATTR onTimer0Cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
 {
 	portENTER_CRITICAL(&timerMux);
-	run_interrupt_control();
+	runInterruptControl();
 	portEXIT_CRITICAL(&timerMux);
 
 	return 0;
 }
 
-static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
+static bool IRAM_ATTR onTimer1Cb(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)
 {
 	portENTER_CRITICAL(&timerMux);
-	sensor_interrupt_control();
+	sensorInterruptControl();
 	portEXIT_CRITICAL(&timerMux);
 
 	return 0;
@@ -40,7 +40,7 @@ static bool IRAM_ATTR onTimer1_cb(gptimer_handle_t timer, const gptimer_alarm_ev
 static bool IRAM_ATTR isrR(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data)
 {
 	portENTER_CRITICAL(&timerMux);
-	run_intterupt_right();
+	runIntteruptRight();
 	portEXIT_CRITICAL(&timerMux);
 
 	return 0;
@@ -49,7 +49,7 @@ static bool IRAM_ATTR isrR(mcpwm_timer_handle_t timer, const mcpwm_timer_event_d
 static bool IRAM_ATTR isrL(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data)
 {
 	portENTER_CRITICAL(&timerMux);
-	run_intterupt_left();
+	runIntteruptLeft();
 	portEXIT_CRITICAL(&timerMux);
 
 	return 0;
@@ -61,7 +61,7 @@ void delay(int timer)
 	vTaskDelay((TickType_t)(timer/portTICK_PERIOD_MS));
 }
 
-void DEVICE::ledc_setup(ledc_channel_t ledc_num,int hz,int resolution)
+void DEVICE::ledcSetup(ledc_channel_t ledc_num,int hz,int resolution)
 {
 	ledc_timer_t timer_num=(ledc_timer_t)(ledc_num/LEDC_CHANNEL_2);
 
@@ -75,7 +75,7 @@ void DEVICE::ledc_setup(ledc_channel_t ledc_num,int hz,int resolution)
 	ledc_timer_config(&ledc_timer);
 }
 
-void DEVICE::ledc_attach_pin(int io_num,ledc_channel_t ledc_num)
+void DEVICE::ledcAttachPin(int io_num,ledc_channel_t ledc_num)
 {
 	ledc_timer_t timer_num=(ledc_timer_t)(ledc_num/LEDC_CHANNEL_2);
 
@@ -91,25 +91,25 @@ void DEVICE::ledc_attach_pin(int io_num,ledc_channel_t ledc_num)
 	ledc_channel_config(&ledc_channel);
 }
 
-void DEVICE::ledc_write (ledc_channel_t ledc_num,int duty){
+void DEVICE::ledcWrite (ledc_channel_t ledc_num,int duty){
     ledc_set_duty(LEDC_LOW_SPEED_MODE, ledc_num, duty);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, ledc_num);
 }
 
-void DEVICE::ledc_writetone(ledc_channel_t ledc_num,int hz){
+void DEVICE::ledcWritetone(ledc_channel_t ledc_num,int hz){
 	ledc_timer_t timer_num=(ledc_timer_t)(ledc_num/LEDC_CHANNEL_2);
 
     if(!hz){
-    	ledc_write(ledc_num,0);
+    	ledcWrite(ledc_num,0);
     }
 
 	ledc_set_freq(LEDC_LOW_SPEED_MODE,timer_num,hz);
-	ledc_write(ledc_num, 0x1FF);
+	ledcWrite(ledc_num, 0x1FF);
 }
 
 
 
-void DEVICE::timer_begin(gptimer_handle_t *timer,int resolution_hz ,gptimer_count_direction_t counter){
+void DEVICE::timerBegin(gptimer_handle_t *timer,int resolution_hz ,gptimer_count_direction_t counter){
     gptimer_config_t timer_config = {};
     timer_config.clk_src = GPTIMER_CLK_SRC_DEFAULT;
     timer_config.direction = counter;
@@ -117,13 +117,13 @@ void DEVICE::timer_begin(gptimer_handle_t *timer,int resolution_hz ,gptimer_coun
 	gptimer_new_timer(&timer_config, timer);
 }
 
-void DEVICE::timer_attach_interrupt(gptimer_handle_t timer, bool (*fn)(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)){
+void DEVICE::timerAttachInterrupt(gptimer_handle_t timer, bool (*fn)(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data)){
 	gptimer_event_callbacks_t cbs = {};
 	cbs.on_alarm = fn;
 	gptimer_register_event_callbacks(timer, &cbs, NULL);
 }
 
-void DEVICE::timer_alarm_write(gptimer_handle_t timer, int period, bool reload){
+void DEVICE::timerAlarmWrite(gptimer_handle_t timer, int period, bool reload){
 	gptimer_alarm_config_t alarm_config = {};
 	alarm_config.reload_count = 0;
 	alarm_config.alarm_count = period;
@@ -131,12 +131,12 @@ void DEVICE::timer_alarm_write(gptimer_handle_t timer, int period, bool reload){
 	gptimer_set_alarm_action(timer, &alarm_config);
 }
 
-void DEVICE::timer_alarm_enable(gptimer_handle_t timer){
+void DEVICE::timerAlarmEnable(gptimer_handle_t timer){
 	gptimer_enable(timer);
 	gptimer_start(timer);
 }
 
-void DEVICE::pwmtimer_begin(mcpwm_timer_handle_t * pwmtimer, int resolution_hz,mcpwm_oper_handle_t *pwmoprator, mcpwm_cmpr_handle_t * comparator){
+void DEVICE::pwmtimerBegin(mcpwm_timer_handle_t * pwmtimer, int resolution_hz,mcpwm_oper_handle_t *pwmoprator, mcpwm_cmpr_handle_t * comparator){
 
 
 //pwm timer
@@ -163,14 +163,14 @@ void DEVICE::pwmtimer_begin(mcpwm_timer_handle_t * pwmtimer, int resolution_hz,m
 
 }
 
-void DEVICE::pwmtimer_attach_interrupt(mcpwm_timer_handle_t timer, bool (*fn)(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data)){
+void DEVICE::pwmtimerAttachInterrupt(mcpwm_timer_handle_t timer, bool (*fn)(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data)){
 	mcpwm_timer_event_callbacks_t tim_cbs = {};
 	tim_cbs.on_empty = fn;
 	mcpwm_timer_register_event_callbacks(timer, &tim_cbs, NULL);
 }
 
 
-void DEVICE::pwmtimer_attach_pin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_handle_t  comparator,int io_num){
+void DEVICE::pwmtimerAttachPin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_handle_t  comparator,int io_num){
 	mcpwm_gen_handle_t generator = NULL;
 
 	mcpwm_generator_config_t generator_config = {};
@@ -194,20 +194,20 @@ void DEVICE::pwmtimer_attach_pin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_han
 
 }
 
-void DEVICE::adc1_begin(adc_oneshot_unit_handle_t *adc1){
+void DEVICE::adc1Begin(adc_oneshot_unit_handle_t *adc1){
 	adc_oneshot_unit_init_cfg_t init_config = {};
 	init_config.unit_id = ADC_UNIT_1;
 	adc_oneshot_new_unit(&init_config, adc1);
 }
 
-void DEVICE::adc1_attach_pin(adc_oneshot_unit_handle_t adc1,int io_num){
+void DEVICE::adc1AttachPin(adc_oneshot_unit_handle_t adc1,int io_num){
 	adc_oneshot_chan_cfg_t config = {};
 	config.bitwidth = ADC_BITWIDTH_DEFAULT;
 	config.atten = ADC_ATTEN;
 	adc_oneshot_config_channel(adc1, (adc_channel_t)io_num, &config);
 }
 
-void DEVICE::adc1_cali(int io_num){
+void DEVICE::adc1Cali(int io_num){
 	adc_cali_curve_fitting_config_t cali_config = {};
 	cali_config.unit_id	=	ADC_UNIT_1;
 	cali_config.chan 		=	(adc_channel_t)io_num;
@@ -217,7 +217,7 @@ void DEVICE::adc1_cali(int io_num){
 }
 
 
-void DEVICE::all_init(void)
+void DEVICE::initAll(void)
 {
     gpio_reset_pin((gpio_num_t)LED0);
     gpio_reset_pin((gpio_num_t)LED1);
@@ -246,9 +246,9 @@ void DEVICE::all_init(void)
     gpio_set_level((gpio_num_t)SLED_S, 0);
 
 
-    ledc_setup(LEDC_CHANNEL_0, 440, 10);
-    ledc_attach_pin(BUZZER, LEDC_CHANNEL_0);
-    ledc_write(LEDC_CHANNEL_0, 0);
+    ledcSetup(LEDC_CHANNEL_0, 440, 10);
+    ledcAttachPin(BUZZER, LEDC_CHANNEL_0);
+    ledcWrite(LEDC_CHANNEL_0, 0);
 
     gpio_reset_pin((gpio_num_t)MOTOR_EN);
     gpio_set_direction((gpio_num_t)MOTOR_EN, GPIO_MODE_OUTPUT);
@@ -261,51 +261,51 @@ void DEVICE::all_init(void)
     gpio_set_level((gpio_num_t)CW_R, 1);
     gpio_set_level((gpio_num_t)CW_L, 0);
 
-	timer_begin(&timer0,1000000,GPTIMER_COUNT_UP);
-	timer_attach_interrupt(timer0,&onTimer0_cb);
-    timer_alarm_write(timer0,1000,true);
-    timer_alarm_enable(timer0);
+	timerBegin(&timer0,1000000,GPTIMER_COUNT_UP);
+	timerAttachInterrupt(timer0,&onTimer0_cb);
+    timerAlarmWrite(timer0,1000,true);
+    timerAlarmEnable(timer0);
 
-	timer_begin(&timer1,1000000,GPTIMER_COUNT_UP);
-	timer_attach_interrupt(timer1,&onTimer1_cb);
-    timer_alarm_write(timer1,500,true);
-    timer_alarm_enable(timer1);
+	timerBegin(&timer1,1000000,GPTIMER_COUNT_UP);
+	timerAttachInterrupt(timer1,&onTimer1_cb);
+    timerAlarmWrite(timer1,500,true);
+    timerAlarmEnable(timer1);
 
-    adc1_begin(&adc1_handle);
-    adc1_attach_pin(adc1_handle,AD0);
-    adc1_attach_pin(adc1_handle,AD1);
-    adc1_attach_pin(adc1_handle,AD2);
-    adc1_attach_pin(adc1_handle,AD3);
-    adc1_attach_pin(adc1_handle,AD4);
-    adc1_cali(AD0);
+    adc1Begin(&adc1_handle);
+    adc1AttachPin(adc1_handle,AD0);
+    adc1AttachPin(adc1_handle,AD1);
+    adc1AttachPin(adc1_handle,AD2);
+    adc1AttachPin(adc1_handle,AD3);
+    adc1AttachPin(adc1_handle,AD4);
+    adc1Cali(AD0);
 
-	pwmtimer_begin(&pwmtimer_r,2000000,&pwmoprator_r,&comparator_r);
+	pwmtimerBegin(&pwmtimer_r,2000000,&pwmoprator_r,&comparator_r);
 	mcpwm_comparator_set_compare_value(comparator_r, 0);
-	pwmtimer_attach_interrupt(pwmtimer_r,isrR);
-	pwmtimer_attach_pin(pwmoprator_r,comparator_r,PWM_R);
+	pwmtimerAttachInterrupt(pwmtimer_r,isrR);
+	pwmtimerAttachPin(pwmoprator_r,comparator_r,PWM_R);
 
-	pwmtimer_begin(&pwmtimer_l,2000000,&pwmoprator_l,&comparator_l);
+	pwmtimerBegin(&pwmtimer_l,2000000,&pwmoprator_l,&comparator_l);
 	mcpwm_comparator_set_compare_value(comparator_l, 0);
-	pwmtimer_attach_interrupt(pwmtimer_l,isrL);
-	pwmtimer_attach_pin(pwmoprator_l,comparator_l,PWM_L);
+	pwmtimerAttachInterrupt(pwmtimer_l,isrL);
+	pwmtimerAttachPin(pwmoprator_l,comparator_l,PWM_L);
 
     mcpwm_timer_enable(pwmtimer_r);
     mcpwm_timer_enable(pwmtimer_l);
 
-    motor_enable();
+    motorEnable();
    	delay(200);
-   	motor_disable();
+   	motorDisable();
 
-    buzzer_enable(INC_FREQ);
+    buzzerEnable(INC_FREQ);
     delay(80);
-    buzzer_disable();
+    buzzerDisable();
 
 }
 
 
 
 //LED
-void DEVICE::LED_set(int led_data)
+void DEVICE::LEDSet(int led_data)
 {
 	gpio_set_level((gpio_num_t)LED0,led_data&0x01);
 	gpio_set_level((gpio_num_t)LED1,(led_data&0x02)>>1);
@@ -314,27 +314,27 @@ void DEVICE::LED_set(int led_data)
 }
 
 //buzzer
-void DEVICE::buzzer_enable(short f) {
-	ledc_writetone(BUZZER_CH, f);
+void DEVICE::buzzerEnable(short f) {
+	ledcWritetone(BUZZER_CH, f);
 }
 
-void DEVICE::buzzer_disable(void)
+void DEVICE::buzzerDisable(void)
 {
-    ledc_write(BUZZER_CH, 0);  //duty 100% Buzzer OFF
+    ledcWrite(BUZZER_CH, 0);  //duty 100% Buzzer OFF
 }
 
 //motor
-void DEVICE::motor_enable(void)
+void DEVICE::motorEnable(void)
 {
 	gpio_set_level((gpio_num_t)MOTOR_EN,1);//Power On
 }
 
-void DEVICE::motor_disable(void)
+void DEVICE::motorDisable(void)
 {
 	gpio_set_level((gpio_num_t)MOTOR_EN,0);//Power Off
 }
 
-void DEVICE::motor_move_dir(t_CW_CCW left_CW, t_CW_CCW right_CW)
+void DEVICE::motorMoveDir(t_CW_CCW left_CW, t_CW_CCW right_CW)
 {
 	if(right_CW == MOT_FORWARD)
 	{
@@ -353,7 +353,7 @@ void DEVICE::motor_move_dir(t_CW_CCW left_CW, t_CW_CCW right_CW)
 }
 
 //switch
-unsigned char DEVICE::switch_get(void)
+unsigned char DEVICE::switchGet(void)
 {
 	unsigned char ret = 0;
 	  if (gpio_get_level((gpio_num_t)SW_R) == 0) {
@@ -372,24 +372,24 @@ unsigned char DEVICE::switch_get(void)
 }
 
 
-void DEVICE::pwm_hz_set(int step_hz_l,int step_hz_r){
+void DEVICE::pwmHzSet(int step_hz_l,int step_hz_r){
 	mcpwm_timer_set_period(pwmtimer_r,2000000 / step_hz_r);
 	mcpwm_timer_set_period(pwmtimer_l,2000000 / step_hz_l);
 	mcpwm_comparator_set_compare_value(comparator_r, 2000000 / step_hz_r/2);
 	mcpwm_comparator_set_compare_value(comparator_l, 2000000 / step_hz_l/2);
 }
 
-void DEVICE::pwm_hz_set_right(int step_hz_r){
+void DEVICE::pwmHzSetRight(int step_hz_r){
 	mcpwm_timer_set_period(pwmtimer_r,2000000 / step_hz_r);
 	mcpwm_comparator_set_compare_value(comparator_r, 2000000 / step_hz_r/2);
 }
 
-void DEVICE::pwm_hz_set_left(int step_hz_l){
+void DEVICE::pwmHzSetLeft(int step_hz_l){
 	mcpwm_timer_set_period(pwmtimer_l,2000000 / step_hz_l);
 	mcpwm_comparator_set_compare_value(comparator_l, 2000000 / step_hz_l/2);
 }
 
-void DEVICE::pwmtimer_start(void)
+void DEVICE::pwmtimerStart(void)
 {
 	portENTER_CRITICAL(&timerMux);
 	mcpwm_timer_start_stop(pwmtimer_r, MCPWM_TIMER_START_NO_STOP);
@@ -397,7 +397,7 @@ void DEVICE::pwmtimer_start(void)
 	portEXIT_CRITICAL(&timerMux);
 }
 
-void DEVICE::pwmtimer_stop(void)
+void DEVICE::pwmtimerStop(void)
 {
 	portENTER_CRITICAL(&timerMux);
 	mcpwm_timer_start_stop(pwmtimer_r,MCPWM_TIMER_STOP_FULL);
@@ -405,7 +405,7 @@ void DEVICE::pwmtimer_stop(void)
 	portEXIT_CRITICAL(&timerMux);
 }
 
-void DEVICE::sensor_get_f(volatile short *fl_value, volatile short *fr_value){
+void DEVICE::sensorGetF(volatile short *fl_value, volatile short *fr_value){
 	volatile int temp_fr, temp_fl,temp;
 	adc_oneshot_read(adc1_handle, AD4, (int *)&temp_fr);
 	adc_oneshot_read(adc1_handle, AD1, (int *)&temp_fl);

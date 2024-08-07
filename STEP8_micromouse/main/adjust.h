@@ -18,12 +18,12 @@
 class ADJUST
 {
 public:
-	void map_view(void);
-	void adc_view(void);
-	void straight_check(int section_check);
-	void rotation_check(void);
+	void viewMap(void);
+	void viewAdc(void);
+	void checkStraight(int section_check);
+	void checkRotation(void);
 	void menu(void);
-	unsigned char mode_exec(unsigned char mode);
+	unsigned char execMode(unsigned char mode);
 };
 
 extern ADJUST g_adjust;

@@ -73,10 +73,10 @@ extern "C"{
 void delay(int timer);
 
 extern "C"{
-extern void run_interrupt_control(void);
-extern void run_intterupt_right(void);
-extern void run_intterupt_left(void);
-extern void sensor_interrupt_control(void);
+extern void runInterruptControl(void);
+extern void runIntteruptRight(void);
+extern void runIntteruptLeft(void);
+extern void sensorInterruptControl(void);
 }
 
 class DEVICE
@@ -96,45 +96,45 @@ public:
     mcpwm_cmpr_handle_t comparator_l = NULL;
     mcpwm_oper_handle_t pwmoprator_l = NULL;
 
-    void LED_set(int led_data);
-    unsigned char switch_get(void);
+    void LEDSet(int led_data);
+    unsigned char switchGet(void);
 
-	void ledc_setup(ledc_channel_t ledc_num,int hz,int resolution);
-	void ledc_write (ledc_channel_t ledc_num,int duty);
-	void ledc_writetone(ledc_channel_t ledc_num,int hz);
-	void ledc_attach_pin(int io_num,ledc_channel_t ledc_num);
-    void buzzer_enable(short f);
-    void buzzer_disable(void);
+	void ledcSetup(ledc_channel_t ledc_num,int hz,int resolution);
+	void ledcWrite (ledc_channel_t ledc_num,int duty);
+	void ledcWritetone(ledc_channel_t ledc_num,int hz);
+	void ledcAttachPin(int io_num,ledc_channel_t ledc_num);
+    void buzzerEnable(short f);
+    void buzzerDisable(void);
 
-    void all_init(void);
-
-
-    void timer_begin(gptimer_handle_t *g_timer,int resolution_hz  ,gptimer_count_direction_t counter);
-    void timer_attach_interrupt(gptimer_handle_t timer, bool (*fn)(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data));
-    void timer_alarm_write(gptimer_handle_t timer, int period, bool reload);
-    void timer_alarm_enable(gptimer_handle_t timer);
-
-    void adc1_begin(adc_oneshot_unit_handle_t *adc1);
-    void adc1_attach_pin(adc_oneshot_unit_handle_t adc1,int io_num);
-    void adc1_cali(int io_num);
+    void initAll(void);
 
 
-    void pwmtimer_begin(mcpwm_timer_handle_t * pwmtimer, int resolution_hz,mcpwm_oper_handle_t *pwmoprator, mcpwm_cmpr_handle_t * comparator);
-    void pwmtimer_attach_interrupt(mcpwm_timer_handle_t timer, bool (*fn)(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data));
-    void pwmtimer_attach_pin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_handle_t  comparator,int io_num);
+    void timerBegin(gptimer_handle_t *g_timer,int resolution_hz  ,gptimer_count_direction_t counter);
+    void timerAttachInterrupt(gptimer_handle_t timer, bool (*fn)(gptimer_handle_t timer, const gptimer_alarm_event_data_t *edata, void *user_data));
+    void timerAlarmWrite(gptimer_handle_t timer, int period, bool reload);
+    void timerAlarmEnable(gptimer_handle_t timer);
 
-    void pwmtimer_start(void);
-    void pwmtimer_stop(void);
-    void motor_enable(void);
-    void motor_disable(void);
-    void motor_move_dir(t_CW_CCW left_CW, t_CW_CCW right_CW);
-	void pwm_hz_set(int step_hz_l,int step_hz_r);
-	void pwm_hz_set_right(int step_hz_r);
-	void pwm_hz_set_left(int step_hz_l);
+    void adc1Begin(adc_oneshot_unit_handle_t *adc1);
+    void adc1AttachPin(adc_oneshot_unit_handle_t adc1,int io_num);
+    void adc1Cali(int io_num);
 
-	void sensor_get_f(volatile short *fl_value, volatile short *fr_value);
-	void sensor_get_s(volatile short *l_value, volatile short *r_value);
-	short voltage_get(void);
+
+    void pwmtimerBegin(mcpwm_timer_handle_t * pwmtimer, int resolution_hz,mcpwm_oper_handle_t *pwmoprator, mcpwm_cmpr_handle_t * comparator);
+    void pwmtimerAttachInterrupt(mcpwm_timer_handle_t timer, bool (*fn)(mcpwm_timer_handle_t timer, const mcpwm_timer_event_data_t *edata, void *user_data));
+    void pwmtimerAttachPin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_handle_t  comparator,int io_num);
+
+    void pwmtimerStart(void);
+    void pwmtimerStop(void);
+    void motorEnable(void);
+    void motorDisable(void);
+    void motorMoveDir(t_CW_CCW left_CW, t_CW_CCW right_CW);
+	void pwmHzSet(int step_hz_l,int step_hz_r);
+	void pwmHzSetRight(int step_hz_r);
+	void pwmHzSetLeft(int step_hz_l);
+
+	void sensorGetF(volatile short *fl_value, volatile short *fr_value);
+	void sensorGetS(volatile short *l_value, volatile short *r_value);
+	short voltageGet(void);
 
 private:
 
