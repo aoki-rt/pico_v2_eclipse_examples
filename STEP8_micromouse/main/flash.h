@@ -15,13 +15,13 @@
 #ifndef MAIN_SPIFFS_H_
 #define MAIN_SPIFFS_H_
 
-	void spiffs_begin(void);
+	void spiffsBegin(void);
 
 class FLASH
 {
 public:
-	void map_write(void);
-	void map_copy(void);
+	void mapWrite(void);
+	void mapCopy(void);
 };
 
 

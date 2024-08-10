@@ -18,7 +18,7 @@
 SENSOR g_sensor;
 
 
-void sensor_interrupt_control(void){
+void sensorInterruptControl(void){
 	g_sensor.interrupt();
 }
 
@@ -45,7 +45,7 @@ void SENSOR::interrupt(void)
 
 	switch (cnt) {
 		case 0:
-			g_device.sensor_get_f(&sen_fl.value,&sen_fr.value);
+			g_device.sensorGetF(&sen_fl.value,&sen_fr.value);
 
 			if (sen_fr.value > sen_fr.th_wall) {
 				sen_fr.is_wall = true;
@@ -59,7 +59,7 @@ void SENSOR::interrupt(void)
 			}
 			break;
 		case 1:
-			g_device.sensor_get_s(&sen_l.value,&sen_r.value);
+			g_device.sensorGetS(&sen_l.value,&sen_r.value);
 
 			if (sen_r.value > sen_r.th_wall) {
 				sen_r.is_wall = true;
@@ -86,7 +86,7 @@ void SENSOR::interrupt(void)
 				sen_l.is_control = false;
 			}
 
-		    battery_value = (double)g_device.voltage_get() / 1.0 * (1.0 + 10.0);
+		    battery_value = (double)g_device.voltageGet() / 1.0 * (1.0 + 10.0);
 
 			break;
 	    default:

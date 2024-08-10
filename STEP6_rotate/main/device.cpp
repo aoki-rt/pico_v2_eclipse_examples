@@ -186,7 +186,7 @@ void DEVICE::pwmtimerAttachPin(mcpwm_oper_handle_t pwmoprator , mcpwm_cmpr_handl
 
 
 
-void DEVICE::initAll(void)
+void DEVICE::allInit(void)
 {
     gpio_reset_pin((gpio_num_t)LED0);
     gpio_reset_pin((gpio_num_t)LED1);

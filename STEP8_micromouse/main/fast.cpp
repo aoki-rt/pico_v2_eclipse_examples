@@ -24,7 +24,7 @@ void FAST::run(short gx, short gy)
   t_direction_glob glob_nextdir;
   int straight_count = 0;
 
-  t_direction temp_next_dir = g_map_control.getNextDir2(gx, gy, &glob_nextdir);
+  t_direction temp_next_dir = g_map_control.nextDir2Get(gx, gy, &glob_nextdir);
   switch (temp_next_dir) {
     case right:
     	g_run.rotate(right, 1);  //right turn
@@ -45,7 +45,7 @@ void FAST::run(short gx, short gy)
   g_map_control.axisUpdate();
 
   while ((g_map_control.mypos.x != gx) || (g_map_control.mypos.y != gy)) {
-    switch (g_map_control.getNextDir2(gx, gy, &glob_nextdir)) {
+    switch (g_map_control.nextDir2Get(gx, gy, &glob_nextdir)) {
       case front:
         straight_count++;
         break;

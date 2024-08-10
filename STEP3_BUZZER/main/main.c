@@ -61,7 +61,7 @@ void LEDSet(char data)
 	}
 }
 
-void execByMode(char mode)
+void modeExec(char mode)
 {
 	switch(mode){
 	case 1:
@@ -96,7 +96,7 @@ void execByMode(char mode)
 	}
 }
 
-void initAll(void){
+void allInit(void){
 	gpio_reset_pin(LED0);
 	gpio_reset_pin(LED1);
 	gpio_reset_pin(LED2);
@@ -136,7 +136,7 @@ void initAll(void){
 
 void app_main(void)
 {
-	initAll();
+	allInit();
 
 	g_mode = 1;
 	LEDSet(g_mode);
@@ -172,7 +172,7 @@ void app_main(void)
         	ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
         	ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         	vTaskDelay(300 / portTICK_PERIOD_MS);
-        	execByMode(g_mode);
+        	modeExec(g_mode);
         }
         while(!(gpio_get_level(SW_L) & gpio_get_level(SW_R))){
         	vTaskDelay(10 / portTICK_PERIOD_MS);

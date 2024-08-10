@@ -23,11 +23,11 @@ using namespace std;
 extern "C" void app_main(void)
 {
 	char temp;
-	g_device.all_init();
+	g_device.allInit();
 
     while (true) {
     	while(true){
-    		temp = g_device.switch_get();
+    		temp = g_device.switchGet();
     		if(temp!=0){
     			break;
     		}
@@ -44,12 +44,12 @@ extern "C" void app_main(void)
     	    	delay(100);
     	    }
     	}
-    	g_device.motor_enable();
+    	g_device.motorEnable();
     	delay(1000);
     	g_run.accelerate(45, 200);
-    	g_run.one_step(90 * 3, 200);
+    	g_run.oneStep(90 * 3, 200);
     	g_run.decelerate(45, 200);
     	delay(1000);
-    	g_device.motor_disable();
+    	g_device.motorDisable();
     }
 }

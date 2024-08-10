@@ -33,7 +33,7 @@ void ADJUST::mapView(void)
   std::cout << "\x1b[0;0H" <<std::endl;
   std::cout << "+";
   for (int i = 0; i < MAZESIZE_X; i++) {
-    switch (g_map_control.getWallData(i, MAZESIZE_Y - 1, north)) {  //black color is"[30m"
+    switch (g_map_control.wallDataGet(i, MAZESIZE_Y - 1, north)) {  //black color is"[30m"
       case NOWALL:
         std::cout << "\x1b[37m  +";  //NOWALL
         break;
@@ -50,7 +50,7 @@ void ADJUST::mapView(void)
   }
   std::cout<<std::endl;
   for (int j = (MAZESIZE_Y - 1); j > -1; j--) {
-    switch (g_map_control.getWallData(0, j, west)) {
+    switch (g_map_control.wallDataGet(0, j, west)) {
       case NOWALL:
     	  std::cout << "\x1b[37m ";  //NOWALL
         break;
@@ -65,7 +65,7 @@ void ADJUST::mapView(void)
         break;
     }
     for (int i = 0; i < MAZESIZE_X; i++) {
-      switch (g_map_control.getWallData(i, j, east)) {
+      switch (g_map_control.wallDataGet(i, j, east)) {
         case NOWALL:
         	std::cout << "\x1b[37m   ";  //NOWALL
           break;
@@ -82,7 +82,7 @@ void ADJUST::mapView(void)
     }
     std::cout<<std::endl<<"+";
     for (int i = 0; i < MAZESIZE_X; i++) {
-      switch (g_map_control.getWallData(i, j, south)) {
+      switch (g_map_control.wallDataGet(i, j, south)) {
         case NOWALL:
         	std::cout << "\x1b[37m  +";  //NOWALL
           break;
@@ -101,7 +101,7 @@ void ADJUST::mapView(void)
   }
 }
 
-void ADJUST::adcView(void)
+void ADJUST::adcValueView(void)
 {
 	g_device.motorDisable();
 
@@ -146,7 +146,7 @@ void ADJUST::menu(void)
 	char sw;
 
 	while (1) {
-		g_device.LED_set(mode);
+		g_device.LEDSet(mode);
 		while (1) {
 			sw = g_device.switchGet();
 			if (sw != 0) break;
@@ -160,7 +160,7 @@ void ADJUST::menu(void)
       			mode = g_misc.buttonInc(mode, 7, 1);
       			break;
       		case SW_LM:
-      			g_misc.button_ok();
+      			g_misc.buttonOk();
       			if (modeExec(mode) == 1) {
       				return;
       			}
@@ -176,7 +176,7 @@ unsigned char ADJUST::modeExec(unsigned char mode)
   g_device.motorEnable();
   switch (mode) {
     case 1:
-      adcView();
+      adcValueView();
       break;
     case 2:
       straightCheck(9);
@@ -187,7 +187,7 @@ unsigned char ADJUST::modeExec(unsigned char mode)
       break;
     case 4:
       g_flash.mapCopy();
-      map_view();
+      mapView();
       break;
 
     case 5:

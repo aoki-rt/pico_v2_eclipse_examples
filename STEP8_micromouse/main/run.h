@@ -39,15 +39,15 @@ typedef struct
 class RUN
 {
 public:
-	void interrupt_control(void);
+	void interruptControl(void);
 	void straight(int len, int init_speed, int max_speed, int finish_speed);
 	void accelerate(int len, int finish_speed);
-	void one_step(int len, int tar_speed);
+	void oneStep(int len, int tar_speed);
 	void decelerate(int len, int tar_speed);
 	void rotate(t_direction dir, int times);
-	bool move_flag_get(void);
-	void step_inc_right(void);
-	void step_inc_left(void);
+	bool moveFlagGet(void);
+	void stepIncRight(void);
+	void stepIncLeft(void);
 
 
 

@@ -19,7 +19,7 @@
 
 SENSOR g_sensor;
 
-void sensor_interrupt_control(void){
+void sensorInterruptControl(void){
 	g_sensor.interrupt();
 }
 
@@ -50,7 +50,7 @@ void SENSOR::interrupt(void)
 			sen_fr.p_value = sen_fr.value;
 			sen_fl.p_value = sen_fl.value;
 
-			g_device.sensor_get_f(&sen_fl.value,&sen_fr.value);
+			g_device.sensorGetF(&sen_fl.value,&sen_fr.value);
 
 			if (sen_fr.value > sen_fr.th_wall) {
 				sen_fr.is_wall = true;
@@ -67,7 +67,7 @@ void SENSOR::interrupt(void)
 			sen_r.p_value = sen_r.value;
 			sen_l.p_value = sen_l.value;
 
-			g_device.sensor_get_s(&sen_l.value,&sen_r.value);
+			g_device.sensorGetS(&sen_l.value,&sen_r.value);
 
 			if (sen_r.value > sen_r.th_wall) {
 				sen_r.is_wall = true;
@@ -99,12 +99,12 @@ void SENSOR::interrupt(void)
 				bled_cnt = 0;
 			}
 
-			battery_value = (double)g_device.voltage_get() / 1.0 * (1.0 + 10.0);
+			battery_value = (double)g_device.voltageGet() / 1.0 * (1.0 + 10.0);
 
 			if (((battery_value - BATT_MIN) * 10 / (BATT_MAX - BATT_MIN)) > bled_cnt) {
-		    	g_device.BLED_set(1);
+		    	g_device.BLEDSet(1);
 		    }else{
-		    	g_device.BLED_set(2);
+		    	g_device.BLEDSet(2);
 		    }
 			break;
 	    default:

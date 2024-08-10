@@ -86,7 +86,7 @@ public:
     void buzzerEnable(short f);
     void buzzerDisable(void);
 
-    void initAll(void);
+    void allInit(void);
 
 
     void timerBegin(gptimer_handle_t *g_timer,int resolution_hz  ,gptimer_count_direction_t counter);

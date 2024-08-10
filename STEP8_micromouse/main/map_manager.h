@@ -52,27 +52,21 @@ public:
 	short goal_my = 7;
 
 	void positionInit(void);
-//	void setMyPosDir(t_direction_glob dir);
-//	short getMyPosX(void);
-//	short getMyPosY(void);
-	char getWallData(unsigned char x, unsigned char y, t_direction_glob dir);
-	void setWallData(unsigned char x, unsigned char y, t_direction_glob dir, char data);
-//	char getGoalX(void);
-//	char getGoalY(void);
-//	void setGoalX(short data);
-//	void setGoalY(short data);
+	char wallDataGet(unsigned char x, unsigned char y, t_direction_glob dir);
+	void wallDataSet(unsigned char x, unsigned char y, t_direction_glob dir, char data);
+
 	void axisUpdate(void);
-	void nextDir(t_direction dir);
-	void setWall(bool IS_SEN_FR, bool IS_SEN_R, bool IS_SEN_L);
-	t_direction getNextDir(char x, char y, t_direction_glob * dir);
-	t_direction getNextDir2(short x, short y, t_direction_glob * dir);
+	void rotateDirSet(t_direction dir);
+	void wallSet(bool IS_SEN_FR, bool IS_SEN_R, bool IS_SEN_L);
+	t_direction nextDirGet(char x, char y, t_direction_glob * dir);
+	t_direction nextDir2Get(short x, short y, t_direction_glob * dir);
 
 private:
 	unsigned short steps_map[MAZESIZE_X][MAZESIZE_Y];  //step map
 	t_wall wall[MAZESIZE_X][MAZESIZE_Y];               //wall information structure arrays
-	void makeSearchMap(int x, int y);
-	void makeMap2(int x, int y);
-	int getPriority(unsigned char x, unsigned char y, t_direction_glob dir);
+	void searchMapMake(int x, int y);
+	void map2Make(int x, int y);
+	int priorityGet(unsigned char x, unsigned char y, t_direction_glob dir);
 };
 
 

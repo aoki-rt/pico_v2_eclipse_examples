@@ -49,7 +49,7 @@ void SEARCH::adachi(char gx, char gy)
   t_direction_glob glob_nextdir;
   t_direction temp_next_dir;
 
-  temp_next_dir = g_map_control.getNextDir(gx, gy, &glob_nextdir);
+  temp_next_dir = g_map_control.nextDirGet(gx, gy, &glob_nextdir);
 
   switch (temp_next_dir) {
     case front:
@@ -71,11 +71,11 @@ void SEARCH::adachi(char gx, char gy)
   g_map_control.axisUpdate();
 
   while ((g_map_control.mypos.x != gx) || (g_map_control.mypos.y != gy)) {
-    g_map_control.setWall(g_sensor.sen_fr.is_wall, g_sensor.sen_r.is_wall, g_sensor.sen_l.is_wall);
+    g_map_control.wallSet(g_sensor.sen_fr.is_wall, g_sensor.sen_r.is_wall, g_sensor.sen_l.is_wall);
 
-    switch (g_map_control.getNextDir(gx, gy, &glob_nextdir)) {
+    switch (g_map_control.nextDirGet(gx, gy, &glob_nextdir)) {
       case front:
-        g_run.one_step(SECTION, SEARCH_SPEED);
+        g_run.oneStep(SECTION, SEARCH_SPEED);
         break;
       case right:
         g_run.decelerate(HALF_SECTION, SEARCH_SPEED);
@@ -98,7 +98,7 @@ void SEARCH::adachi(char gx, char gy)
     g_map_control.axisUpdate();
   }
 
-  g_map_control.setWall(g_sensor.sen_fr.is_wall, g_sensor.sen_r.is_wall, g_sensor.sen_l.is_wall);
+  g_map_control.wallSet(g_sensor.sen_fr.is_wall, g_sensor.sen_r.is_wall, g_sensor.sen_l.is_wall);
   g_run.decelerate(HALF_SECTION, SEARCH_SPEED);
 }
 

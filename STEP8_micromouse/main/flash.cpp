@@ -33,7 +33,7 @@ FLASH g_flash;
 
 //#define FLASH_CHECK
 
-void spiffs_begin(void){
+void spiffsBegin(void){
 
 	esp_vfs_spiffs_conf_t conf = {
 		.base_path = "/spiffs",
@@ -92,10 +92,10 @@ void spiffs_begin(void){
 #endif
 }
 
-void FLASH::map_copy(void){
-	g_device.control_stop();
-	g_device.sensor_stop();
-	g_device.pwmtimer_stop();
+void FLASH::mapCopy(void){
+	g_device.controlStop();
+	g_device.sensorStop();
+	g_device.pwmtimerStop();
 
 	char read_data[1];
 
@@ -110,27 +110,27 @@ void FLASH::map_copy(void){
 		for (int j = 0; j < 16; j++) {
 			if(!inputfile.eof()){
 				inputfile.read(read_data,sizeof(read_data));
-				g_map_control.setWallData(i, j, north, ((unsigned char)read_data[0]) & 0x03);
-				g_map_control.setWallData(i, j, east, ((unsigned char)read_data[0] >> 2) & 0x03);
-				g_map_control.setWallData(i, j, south, ((unsigned char)read_data[0] >> 4) & 0x03);
-				g_map_control.setWallData(i, j, west, ((unsigned char)read_data[0] >> 6) & 0x03);
+				g_map_control.wallDataSet(i, j, north, ((unsigned char)read_data[0]) & 0x03);
+				g_map_control.wallDataSet(i, j, east, ((unsigned char)read_data[0] >> 2) & 0x03);
+				g_map_control.wallDataSet(i, j, south, ((unsigned char)read_data[0] >> 4) & 0x03);
+				g_map_control.wallDataSet(i, j, west, ((unsigned char)read_data[0] >> 6) & 0x03);
 			} else {
 				std::cout<<"Read Error"<<std::endl;
 			}
 		}
 	}
 	inputfile.close();
-	g_device.control_start();
-	g_device.sensor_start();
-	g_device.pwmtimer_start();
+	g_device.controlStart();
+	g_device.sensorStart();
+	g_device.pwmtimerStart();
 }
 
-void FLASH::map_write(void){
+void FLASH::mapWrite(void){
 	unsigned char data_temp;
 
-	g_device.control_stop();
-	g_device.sensor_stop();
-	g_device.pwmtimer_stop();
+	g_device.controlStop();
+	g_device.sensorStop();
+	g_device.pwmtimerStop();
 
     std::ofstream outputfile;
     outputfile.open("/spiffs/map.txt");
@@ -141,10 +141,10 @@ void FLASH::map_write(void){
     }
     for (int i = 0; i < 16; i++) {
     	for (int j = 0; j < 16; j++) {
-    		data_temp = g_map_control.getWallData(i, j, north) +
-    				(g_map_control.getWallData(i, j, east) << 2) +
-					(g_map_control.getWallData(i, j, south) << 4) +
-					(g_map_control.getWallData(i, j, west) << 6);
+    		data_temp = g_map_control.wallDataGet(i, j, north) +
+    				(g_map_control.wallDataGet(i, j, east) << 2) +
+					(g_map_control.wallDataGet(i, j, south) << 4) +
+					(g_map_control.wallDataGet(i, j, west) << 6);
     		if (outputfile<<data_temp) {  //binary data write
     		} else {
     			std::cout<<"- write failed"<<std::endl;
@@ -153,9 +153,9 @@ void FLASH::map_write(void){
     }
 
     outputfile.close();
-    g_device.control_start();
-    g_device.sensor_start();
-    g_device.pwmtimer_start();
+    g_device.controlStart();
+    g_device.sensorStart();
+    g_device.pwmtimerStart();
 
 }
 

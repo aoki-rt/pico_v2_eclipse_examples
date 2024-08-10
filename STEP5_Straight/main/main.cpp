@@ -19,7 +19,7 @@
 
 extern "C" void app_main(void)
 {
-	g_device.initAll();
+	g_device.allInit();
 
     while (true) {
     	while(g_device.switchGet()==0) {

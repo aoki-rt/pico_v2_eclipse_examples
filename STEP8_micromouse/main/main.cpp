@@ -26,10 +26,10 @@
 
 signed char g_mode;
 
-void mode_exec(int mode)
+void modeExec(int mode)
 {
-	g_device.motor_enable();
-	g_device.pwmtimer_stop();
+	g_device.motorEnable();
+	g_device.pwmtimerStop();
 
 	delay(1000);
 
@@ -41,27 +41,27 @@ void mode_exec(int mode)
     		g_map_control.positionInit();
 			g_search.adachi(g_map_control.goal_mx, g_map_control.goal_my);
 			g_run.rotate(right, 2);
-			g_map_control.nextDir(right);
-			g_map_control.nextDir(right);
-			g_misc.appeal_goal();
+			g_map_control.rotateDirSet(right);
+			g_map_control.rotateDirSet(right);
+			g_misc.goalAppeal();
 			g_search.adachi(0, 0);
 			g_run.rotate(right, 2);
-			g_map_control.nextDir(right);
-			g_map_control.nextDir(right);
-			g_flash.map_write();
+			g_map_control.rotateDirSet(right);
+			g_map_control.rotateDirSet(right);
+			g_flash.mapWrite();
 			break;
     	case 3:  //shortest running
-			g_flash.map_copy();
+			g_flash.mapCopy();
 			g_map_control.positionInit();
 			g_fast.run(g_map_control.goal_mx, g_map_control.goal_my);
 			g_run.rotate(right, 2);
-			g_map_control.nextDir(right);
-			g_map_control.nextDir(right);
-			g_misc.appeal_goal();
+			g_map_control.rotateDirSet(right);
+			g_map_control.rotateDirSet(right);
+			g_misc.goalAppeal();
 			g_fast.run(0, 0);
 			g_run.rotate(right, 2);
-			g_map_control.nextDir(right);
-			g_map_control.nextDir(right);
+			g_map_control.rotateDirSet(right);
+			g_map_control.rotateDirSet(right);
 			break;
     	case 4:
     		break;
@@ -86,35 +86,35 @@ void mode_exec(int mode)
 		case 14:
 			break;
 		case 15:
-			g_device.motor_disable();
+			g_device.motorDisable();
 			g_adjust.menu();  //to adjust menu
 			break;
 		default:
 			break;
 	}
-	g_device.motor_disable();
+	g_device.motorDisable();
 }
 
 extern "C" void app_main(void)
 {
 	delay(1000);
-	spiffs_begin();
-	g_device.all_init();
+	spiffsBegin();
+	g_device.allInit();
 	g_map_control.goal_mx = GOAL_X;
 	g_map_control.goal_my = GOAL_Y;
 
-	g_device.buzzer_disable();
+	g_device.buzzerDisable();
 	g_mode = 1;
 
     while (true) {
-    	g_device.LED_set((int)g_mode);
-    	switch (g_device.switch_get()) {
+    	g_device.LEDSet((int)g_mode);
+    	switch (g_device.switchGet()) {
     	    case SW_RM:
-    	    	g_mode = g_misc.button_inc(g_mode, 15, 1);
+    	    	g_mode = g_misc.buttonInc(g_mode, 15, 1);
     	    	break;
     		case SW_LM:
-    			g_misc.button_ok();
-    			mode_exec(g_mode);
+    			g_misc.buttonOk();
+    			modeExec(g_mode);
     	}
     	delay(10);
     }

@@ -20,9 +20,9 @@
 
 class MISC{
 public:
-	short button_inc(short data, short limit, short limit_data);
-	void button_ok(void);
-	void appeal_goal(void);
+	short buttonInc(short data, short limit, short limit_data);
+	void buttonOk(void);
+	void goalAppeal(void);
 };
 
 extern MISC g_misc;

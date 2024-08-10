@@ -19,53 +19,53 @@
 
 MISC g_misc;
 
-short MISC::button_inc(short data, short limit, short limit_data)
+short MISC::buttonInc(short data, short limit, short limit_data)
 {
 	data++;
 	if (data > limit) {
 		data = limit_data;
 	}
-	g_device.buzzer_enable(INC_FREQ);
+	g_device.buzzerEnable(INC_FREQ);
 	delay(30);
-	g_device.buzzer_disable();
+	g_device.buzzerDisable();
 	return data;
 }
 
-void MISC::button_ok(void)
+void MISC::buttonOk(void)
 {
-	g_device.buzzer_enable(DEC_FREQ);
+	g_device.buzzerEnable(DEC_FREQ);
 	delay(80);
-	g_device.buzzer_enable(INC_FREQ);
+	g_device.buzzerEnable(INC_FREQ);
 	delay(80);
-	g_device.buzzer_disable();
+	g_device.buzzerDisable();
 }
 
-void MISC::appeal_goal(void)
+void MISC::goalAppeal(void)
 {
 	unsigned char led_data;
 
 	int wtime = 100;
 
-	g_device.motor_disable();
-	g_flash.map_write();
+	g_device.motorDisable();
+	g_flash.mapWrite();
 
 	for (int j = 0; j < 10; j++) {
 		led_data = 1;
 		for (int i = 0; i < 4; i++) {
-			g_device.LED_set(led_data);
+			g_device.LEDSet(led_data);
 			led_data <<= 1;
 			delay(wtime);
 		}
 		led_data = 8;
 		for (int i = 0; i < 4; i++) {
-			g_device.LED_set(led_data);
+			g_device.LEDSet(led_data);
 			led_data >>= 1;
 			delay(wtime);
 		}
 		wtime -= 5;
 	}
 	delay(500);
-	g_device.motor_enable();
+	g_device.motorEnable();
 }
 
 

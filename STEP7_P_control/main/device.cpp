@@ -217,7 +217,7 @@ void DEVICE::adc1Cali(int io_num){
 }
 
 
-void DEVICE::initAll(void)
+void DEVICE::allInit(void)
 {
     gpio_reset_pin((gpio_num_t)LED0);
     gpio_reset_pin((gpio_num_t)LED1);
@@ -262,12 +262,12 @@ void DEVICE::initAll(void)
     gpio_set_level((gpio_num_t)CW_L, 0);
 
 	timerBegin(&timer0,1000000,GPTIMER_COUNT_UP);
-	timerAttachInterrupt(timer0,&onTimer0_cb);
+	timerAttachInterrupt(timer0,&onTimer0Cb);
     timerAlarmWrite(timer0,1000,true);
     timerAlarmEnable(timer0);
 
 	timerBegin(&timer1,1000000,GPTIMER_COUNT_UP);
-	timerAttachInterrupt(timer1,&onTimer1_cb);
+	timerAttachInterrupt(timer1,&onTimer1Cb);
     timerAlarmWrite(timer1,500,true);
     timerAlarmEnable(timer1);
 
@@ -418,7 +418,7 @@ void DEVICE::sensorGetF(volatile short *fl_value, volatile short *fr_value){
     gpio_set_level((gpio_num_t)SLED_F,0);	//LED off
 
 }
-void DEVICE::sensor_get_s(volatile short *l_value, volatile short *r_value){
+void DEVICE::sensorGetS(volatile short *l_value, volatile short *r_value){
 	volatile int temp_r, temp_l,temp;
 
 	adc_oneshot_read(adc1_handle, AD3, (int *)&temp_r);
@@ -434,7 +434,7 @@ void DEVICE::sensor_get_s(volatile short *l_value, volatile short *r_value){
 
 }
 
-short DEVICE::voltage_get(void)
+short DEVICE::voltageGet(void)
 {
 	int temp,v_temp;
 	adc_oneshot_read(adc1_handle, AD0, &temp);

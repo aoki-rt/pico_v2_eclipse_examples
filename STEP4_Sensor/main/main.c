@@ -87,7 +87,7 @@ static bool IRAM_ATTR onTimer1Cb(gptimer_handle_t timer, const gptimer_alarm_eve
 	return 0;
 }
 
-void initAll(void){
+void allInit(void){
 	//init gpio
 	gpio_reset_pin(SLED_F);
 	gpio_reset_pin(SLED_S);
@@ -146,7 +146,7 @@ void initAll(void){
 
 void app_main(void)
 {
-	initAll();
+	allInit();
 
 	gptimer_start(gptimer);
 
